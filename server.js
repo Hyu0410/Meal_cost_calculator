@@ -27,9 +27,7 @@ app.get('/', (req, res) => {
 
 app.post('/upload', upload.fields([{ name: 'workLogFile' }, { name: 'mealOrderFile' }]), (req, res) => {
     const { month } = req.body;
-
-    console.log(month);
-
+    
     res.status(200).json({
         message: "upload success"
     })
