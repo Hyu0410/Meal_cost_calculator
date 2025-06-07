@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
+const fs = require('fs');
 const app = express();
-const { findExcelFile, readPersonName, countWorkdaysInPeriod } = require('./utils/parseExcel');
+const { readPersonName, countWorkdaysInPeriod } = require('./utils/parseExcel');
 const { generateMealCostExcel } = require('./utils/mealCostCalc');
 const dotenv = require('dotenv');
 dotenv.config();
@@ -42,7 +43,19 @@ app.post('/upload', upload.fields([{ name: 'workLogFile' }, { name: 'mealOrderFi
         generateMealCostExcel(mealOrderPath, workdays, outputPath);
 
         console.log('✅ 식대 엑셀 파일 생성 완료:', outputPath);
-        res.download(outputPath, 'meal_cost_summary.xlsx'); 
+        res.download(outputPath, 'meal_cost_summary.xlsx', (error) => {
+            if(error) {
+                console.error('파일 다운로드 중 에러: error');
+            }
+
+            // 다운로드 완료 후 파일 삭제
+            [mealOrderPath, workLogPath, outputPath].forEach(file => {
+            fs.unlink(file, (unlinkErr) => {
+            if (unlinkErr) console.error('파일 삭제 실패:', file, unlinkErr);
+            else console.log('파일 삭제 완료:', file);
+            });
+        });
+        }); 
     } catch(err) {
         console.error('에러 발생:', err);
         res.status(500).json({ 

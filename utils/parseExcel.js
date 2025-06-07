@@ -2,15 +2,6 @@ const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 
-function findExcelFile(baseName, dir = 'uploads') {
-  const files = fs.readdirSync(dir);
-  const matched = files.find(file =>
-    file.startsWith(baseName) && 
-    (file.toLowerCase().endsWith('.xls') || file.toLowerCase().endsWith('.xlsx'))
-  );
-  return matched ? path.join(dir, matched) : null;
-}
-
 function readPersonName(filePath) {
   if (!fs.existsSync(filePath)) {
     throw new Error('File not found: ' + filePath);
@@ -47,7 +38,6 @@ function countWorkdaysInPeriod(nameList, workLogFilePath) {
 }
 
 module.exports = {
-  findExcelFile,
   readPersonName,
   countWorkdaysInPeriod
 };
