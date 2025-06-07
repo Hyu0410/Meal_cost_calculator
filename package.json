@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Hyu0410/Meal_cost_calculator#readme",
   "dependencies": {
+    "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "multer": "^2.0.1",
