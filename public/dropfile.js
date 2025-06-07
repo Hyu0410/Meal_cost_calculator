@@ -105,23 +105,34 @@ document.addEventListener("DOMContentLoaded", () => {
     formData.append("workLogFile", dropFile.filesList[0]);
     formData.append("mealOrderFile", dropFile.filesList[1]);
 
-    const month = document.getElementById("month").value;
-    if (!month) {
-      alert("월을 선택해주세요.");
-      return;
-    }
-    formData.append("month", month);
+    // const month = document.getElementById("month").value;
+    // if (!month) {
+    //   alert("월을 선택해주세요.");
+    //   return;
+    // }
+    // formData.append("month", month);
 
     fetch("/upload", {
       method: "POST",
       body: formData,
     })
-      .then((res) => res.text())
-      .then((data) => {
-        alert("업로드 성공: " + data);
-      })
-      .catch((err) => {
+    .then((res) => {
+        if (!res.ok) throw new Error("서버 오류");
+        return res.blob();
+    })
+    .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "meal_cost_summary.xlsx";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+    })
+    .catch((err) => {
         console.error("업로드 실패", err);
-      });
+        alert("업로드 중 오류가 발생했습니다.");
+    });
   });
 });

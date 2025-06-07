@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const { findExcelFile, readPersonName, countWorkdaysInPeriod } = require('./utils/parseExcel');
+const { generateMealCostExcel } = require('./utils/mealCostCalc');
 const dotenv = require('dotenv');
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -11,8 +13,9 @@ const storage = multer.diskStorage({
     cb(null, 'uploads/'); // 저장할 폴더
   },
   filename: (req, file, cb) => {
-    // 원본 파일명과 확장자 유지
-    cb(null, file.fieldname + path.extname(file.originalname));
+    const timestamp = Date.now();
+    const ext = path.extname(file.originalname);
+    cb(null, `${file.fieldname}-${timestamp}${ext}`);
   },
 });
 const upload = multer({ storage: storage });
@@ -26,11 +29,26 @@ app.get('/', (req, res) => {
 });
 
 app.post('/upload', upload.fields([{ name: 'workLogFile' }, { name: 'mealOrderFile' }]), (req, res) => {
-    const { month } = req.body;
-    
-    res.status(200).json({
-        message: "upload success"
-    })
+    try {
+        const mealOrderPath = req.files['mealOrderFile'][0].path;
+        const workLogPath = req.files['workLogFile'][0].path;
+        const timestamp = Date.now();
+        const fileName = `meal_cost_summary_${timestamp}.xlsx`;
+        const outputPath = path.join('output', fileName);
+
+        const nameList = readPersonName(mealOrderPath);
+        const workdays = countWorkdaysInPeriod(nameList, workLogPath);
+
+        generateMealCostExcel(mealOrderPath, workdays, outputPath);
+
+        console.log('✅ 식대 엑셀 파일 생성 완료:', outputPath);
+        res.download(outputPath, 'meal_cost_summary.xlsx'); 
+    } catch(err) {
+        console.error('에러 발생:', err);
+        res.status(500).json({ 
+            error: 'Internal Server Error' 
+        });
+    }
 })
 
 app.listen(PORT, () => {
