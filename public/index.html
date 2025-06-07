@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>File Upload with Month Select</title>
+  <script src="dropfile.js" defer></script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="root">
+    <h2 class="title">File Upload</h2>
+    <hr />
+    <div class="contents">
+      <div class="upload-box">
+        <div id="drop-file" class="drag-file">
+          <img
+            src="https://img.icons8.com/pastel-glyph/2x/image-file.png"
+            alt="파일 아이콘"
+            class="image"
+          />
+          <p class="message">Drag files to upload</p>
+        </div>
+        <label class="file-label" for="chooseFile">Choose File</label>
+        <input
+          class="file"
+          id="chooseFile"
+          type="file"
+          multiple
+          onchange="dropFile.handleFiles(this.files)"
+        />
+      </div>
+
+      <div class="right-panel">
+        <div id="files" class="files">
+          <!-- 업로드된 파일 리스트가 여기에 동적으로 추가됩니다 -->
+        </div>
+
+        <div class="month-select-container">
+          <label for="month">Select Month</label>
+          <select id="month" name="month">
+            <option value="">--월 선택--</option>
+            <option value="1">1월</option>
+            <option value="2">2월</option>
+            <option value="3">3월</option>
+            <option value="4">4월</option>
+            <option value="5">5월</option>
+            <option value="6">6월</option>
+            <option value="7">7월</option>
+            <option value="8">8월</option>
+            <option value="9">9월</option>
+            <option value="10">10월</option>
+            <option value="11">11월</option>
+            <option value="12">12월</option>
+          </select>
+
+        </div>
+
+
+        <div class="button-container">
+            <button id="calculateBtn" type="button">submit</button>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</body>
+</html>
