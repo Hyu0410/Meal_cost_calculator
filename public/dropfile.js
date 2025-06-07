@@ -74,6 +74,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.dropFile = dropFile;
 
+  // 드래그앤드롭 이벤트 추가
+  const dropArea = document.getElementById("drop-file");
+
+  dropArea.addEventListener("dragover", (event) => {
+    event.preventDefault();
+    dropArea.classList.add("dragover"); // 필요하면 스타일 추가 가능
+  });
+
+  dropArea.addEventListener("dragleave", (event) => {
+    event.preventDefault();
+    dropArea.classList.remove("dragover");
+  });
+
+  dropArea.addEventListener("drop", (event) => {
+    event.preventDefault();
+    dropArea.classList.remove("dragover");
+
+    const droppedFiles = event.dataTransfer.files;
+    dropFile.handleFiles(droppedFiles);
+  });
+
   document.getElementById("calculateBtn").addEventListener("click", () => {
     if (dropFile.filesList.length < 2) {
       alert("파일을 두 개 이상 업로드해주세요.");
