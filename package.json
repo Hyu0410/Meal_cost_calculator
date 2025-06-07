@@ -1,0 +1,30 @@
+{
+  "name": "meal_cost_calculator",
+  "version": "1.0.0",
+  "description": "출근 정보 파일(.xsl)을 이용한 식대 계산 자동화 서비스",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hyu0410/Meal_cost_calculator.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Hyu0410/Meal_cost_calculator/issues"
+  },
+  "homepage": "https://github.com/Hyu0410/Meal_cost_calculator#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
