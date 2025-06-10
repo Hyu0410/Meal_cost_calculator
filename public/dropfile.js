@@ -105,13 +105,6 @@ document.addEventListener("DOMContentLoaded", () => {
     formData.append("workLogFile", dropFile.filesList[0]);
     formData.append("mealOrderFile", dropFile.filesList[1]);
 
-    // const month = document.getElementById("month").value;
-    // if (!month) {
-    //   alert("월을 선택해주세요.");
-    //   return;
-    // }
-    // formData.append("month", month);
-
     fetch("/upload", {
       method: "POST",
       body: formData,

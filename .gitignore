@@ -1,5 +1,6 @@
 /node_modules/
 /uploads/
+/output/
 
 .env
 test.js
