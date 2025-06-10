@@ -1,7 +1,6 @@
 const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
-const { detectFormat } = require('./formatDetector');
 
 function getFirst3Rows(filePath) { // 첫번째 시트에서 1-3행만 읽어와 2차원 배열로 리턴
   const workbook = XLSX.readFile(filePath);
@@ -36,33 +35,11 @@ function readPersonName(filePath) {
   const data = XLSX.utils.sheet_to_json(sheet);
 
   const names = data.map(row => row['이름']).filter(name => name);
-  return names;
-}
-
-function countWorkdaysInPeriod(nameList, workLogFilePath) {
-  const workbook = XLSX.readFile(workLogFilePath);
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  const rows = XLSX.utils.sheet_to_json(sheet);
-
-  const result = {};
-  nameList.forEach(name => result[name] = 0); // 이름별 초기화
-
-  rows.forEach(row => {
-    const name = row['이름'];
-    const workIn = row['출근'];
-    const workOut = row['퇴근'];
-
-    if (!nameList.includes(name)) return;
-    if (!workIn && !workOut) return;
-
-    result[name]++;
-  });
-
-  return result;
+  const cleanNameList = names.map(name => name.replace(/\s+/g, '').trim());
+  return cleanNameList;
 }
 
 module.exports = {
   getFirst3Rows,
-  readPersonName,
-  countWorkdaysInPeriod
+  readPersonName
 };
