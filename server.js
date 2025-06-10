@@ -2,8 +2,9 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const app = express();
-const { readPersonName, countWorkdaysInPeriod } = require('./utils/parseExcel');
-const { generateMealCostExcel } = require('./utils/mealCostCalc');
+const { readPersonName } = require('./utils/parseExcel');
+const { generateMealCostExcel, countWorkdaysInPeriod_old, countWorkdaysInPeriod_new } = require('./utils/mealCostCalc');
+const { detectFormat } = require('./utils/formatDetector');
 const dotenv = require('dotenv');
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -38,7 +39,14 @@ app.post('/upload', upload.fields([{ name: 'workLogFile' }, { name: 'mealOrderFi
         const outputPath = path.join('output', fileName);
 
         const nameList = readPersonName(mealOrderPath);
-        const workdays = countWorkdaysInPeriod(nameList, workLogPath);
+        const format = detectFormat(workLogPath);
+        let workdays = {};
+
+        if (format == 'old') {
+            workdays = countWorkdaysInPeriod_old(nameList, workLogPath);
+        } else {
+            workdays = countWorkdaysInPeriod_new(nameList, workLogPath);
+        }
 
         generateMealCostExcel(mealOrderPath, workdays, outputPath);
 

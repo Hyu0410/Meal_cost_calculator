@@ -73,7 +73,7 @@ function generateMealCostExcel(mealOrderFilePath, workdaysByPerson, outputPath) 
 
   const resultData = data.map(row => {
     const name = row['이름'];
-    const cleanedName = name.replace(/\s+/g, '');
+    const cleanedName = name.replace(/\s+/g, '').trim();
     const cost = Number(row['비용']);
     const days = workdaysByPerson[cleanedName] || 0;
     const total = cost * days;
